@@ -328,22 +328,26 @@ class InstaAssetPickerBuilder extends DefaultAssetPickerBuilderDelegate {
       valueListenable: _cropController.isCropViewReady,
       builder: (_, isLoaded, __) => Consumer<DefaultAssetPickerProvider>(
         builder: (_, DefaultAssetPickerProvider p, __) {
-          return TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor:
-                  p.isSelectedNotEmpty ? themeColor : theme.dividerColor,
-            ),
-            onPressed: isLoaded && p.isSelectedNotEmpty
-                ? () => onConfirm(context)
-                : null,
-            child: isLoaded
-                ? Text(
-                    p.isSelectedNotEmpty && !isSingleAssetMode
-                        ? '${textDelegate.confirm}'
-                            ' (${p.selectedAssets.length}/${p.maxAssets})'
-                        : textDelegate.confirm,
-                  )
-                : _buildLoader(context, 10),
+          return Container
+          (
+            padding: const EdgeInsets.only(right:20),
+            child: Opacity
+            (
+              opacity: p.isSelectedNotEmpty ? 1.0 : 0.5,
+              child: TextButton
+              (
+                style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  foregroundColor: Colors.black
+              ),
+              onPressed: isLoaded && p.isSelectedNotEmpty
+                  ? () => onConfirm(context)
+                  : null,
+              child: isLoaded
+                  ? Text(textDelegate.confirm)
+                  : _buildLoader(context, 10),
+            )
+            )
           );
         },
       ),
@@ -433,7 +437,8 @@ class InstaAssetPickerBuilder extends DefaultAssetPickerBuilderDelegate {
                         backgroundColor: theme.appBarTheme.backgroundColor,
                         title: title != null
                             ? Text(
-                                title!,
+                                isSingleAssetMode ? title! :
+                                  '${provider.selectedAssets.length}/${provider.maxAssets}' ,
                                 style: theme.appBarTheme.titleTextStyle,
                               )
                             : null,
