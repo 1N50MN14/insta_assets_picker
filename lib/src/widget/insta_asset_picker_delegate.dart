@@ -333,20 +333,18 @@ class InstaAssetPickerBuilder extends DefaultAssetPickerBuilderDelegate {
             padding: const EdgeInsets.only(right:20),
             child: Opacity
             (
-              opacity: p.isSelectedNotEmpty ? 1.0 : 0.5,
+              opacity: p.isSelectedNotEmpty || isLoaded ? 1.0 : 0.5,
               child: TextButton
               (
                 style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   foregroundColor: Colors.black
-              ),
-              onPressed: isLoaded && p.isSelectedNotEmpty
-                  ? () => onConfirm(context)
-                  : null,
-              child: isLoaded
-                  ? Text(textDelegate.confirm)
-                  : _buildLoader(context, 10),
-            )
+                ),
+                onPressed: isLoaded && p.isSelectedNotEmpty
+                    ? () => onConfirm(context)
+                    : null,
+                child: Text(textDelegate.confirm)
+              )
             )
           );
         },
@@ -436,11 +434,7 @@ class InstaAssetPickerBuilder extends DefaultAssetPickerBuilderDelegate {
                       appBar: AssetPickerAppBar(
                         backgroundColor: theme.appBarTheme.backgroundColor,
                         title: title != null
-                            ? Text(
-                                isSingleAssetMode ? title! :
-                                  '${provider.selectedAssets.length}/${provider.maxAssets}' ,
-                                style: theme.appBarTheme.titleTextStyle,
-                              )
+                            ? Text(title!, style: theme.appBarTheme.titleTextStyle,)
                             : null,
                         leading: backButton(context),
                         actions: <Widget>[confirmButton(context)],
